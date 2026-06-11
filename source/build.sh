@@ -3,5 +3,5 @@
 
 mkdir -p ../build
 pushd ../build >> /dev/null
-gcc ../source/iup_rbyedit.c -o debug -g -liup
+gcc ../source/gtk_rbyedit.c -g -o debug $(pkg-config --cflags --libs gtk4)
 popd >> /dev/null
