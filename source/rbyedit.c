@@ -1,6 +1,6 @@
+#include "rbyedit.h"
 #include <stdlib.h>
 #include <string.h>
-#include <stdint.h>
 
 #define assert(expr) do{if(!(expr)) *(char *)0 = 0;} while(0)
 
@@ -13,27 +13,8 @@
 #define MONEY_ADDR 0x25F3
 #define BAG_ADDR 0x25C9
 
-typedef struct
-{
-	int id;
-	int count;
-} ListEntry;
 
-typedef struct
-{
-	int count;
-	ListEntry *entries;
-} List;
-
-typedef struct
-{
-	char *player_name;
-	char *rival_name;
-	int money;
-	List bag;
-} SaveData;
-
-uint8_t ascii_to_rby(uint8_t c)
+static uint8_t ascii_to_rby(uint8_t c)
 {
 	if((c >= 'A' && c <= 'Z') ||
    	   (c >= 'a' && c <= 'z'))
@@ -44,7 +25,7 @@ uint8_t ascii_to_rby(uint8_t c)
 	return c;
 }
 
-uint8_t rby_to_ascii(uint8_t c)
+static uint8_t rby_to_ascii(uint8_t c)
 {
 	if((c >= 0x80 && c <= 0x99) ||
    	   (c >= 0xA0 && c <= 0xB9))
@@ -55,7 +36,7 @@ uint8_t rby_to_ascii(uint8_t c)
 	return c;
 }
 
-List get_bag(uint8_t *save)
+static List get_bag(uint8_t *save)
 {
 	List list;
 	list.count = save[BAG_ADDR];
@@ -74,7 +55,7 @@ List get_bag(uint8_t *save)
 	return list;
 }
 
-int get_money(uint8_t *save)
+static int get_money(uint8_t *save)
 {
 	uint32_t bcd = *(uint32_t *)(save + MONEY_ADDR);
 	bcd = __builtin_bswap32(bcd);
@@ -93,7 +74,7 @@ int get_money(uint8_t *save)
 	return money;
 }
 
-char *get_rival_name(uint8_t *save)
+static char *get_rival_name(uint8_t *save)
 {
 	char *name = malloc(8);
 	assert(name);
@@ -109,7 +90,7 @@ char *get_rival_name(uint8_t *save)
 
 }
 
-char *get_player_name(uint8_t *save)
+static char *get_player_name(uint8_t *save)
 {
 	char *name = malloc(8);
 	assert(name);
@@ -126,7 +107,7 @@ char *get_player_name(uint8_t *save)
 
 
 
-void set_checksum(uint8_t *save)
+static void set_checksum(uint8_t *save)
 {
 	uint8_t checksum = 0;
 
@@ -138,7 +119,7 @@ void set_checksum(uint8_t *save)
 	save[CHECKSUM_ADDR] = ~checksum;
 }
 
-void set_bag(uint8_t *save, List bag)
+static void set_bag(uint8_t *save, List bag)
 {
 	save[BAG_ADDR] = bag.count;
 	int addr = BAG_ADDR + 1;
@@ -161,7 +142,7 @@ void set_bag(uint8_t *save, List bag)
 	}
 }
 
-void set_money(uint8_t *save, uint32_t amount)
+static void set_money(uint8_t *save, uint32_t amount)
 {
 	if(amount > 999999) amount = 999999;
 	
@@ -179,7 +160,7 @@ void set_money(uint8_t *save, uint32_t amount)
 	save[MONEY_ADDR + 2] = bcd;
 }
 
-void write_string(uint8_t *save, int address, char *string)
+static void write_string(uint8_t *save, int address, char *string)
 {
 	int i;
 	for(i = 0; string[i] != '\0'; i++)

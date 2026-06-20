@@ -1,7 +1,9 @@
 #!/bin/bash
 
+CFLAGS="-g -Wall -Wextra -Werror -Wno-discarded-qualifiers -Wno-unused-parameter"
+GTK_FLAGS=$(pkg-config --cflags --libs gtk4)
 
 mkdir -p ../build
 pushd ../build >> /dev/null
-gcc ../source/gtk_rbyedit.c -g -o debug $(pkg-config --cflags --libs gtk4)
+gcc ../source/gtk_rbyedit.c ../source/gtk_tab.c ../source/rbyedit.c  ../source/iteminfo.c $CFLAGS $GTK_FLAGS -o debug
 popd >> /dev/null
