@@ -1,14 +1,13 @@
 #include "gtk_rbyedit.h"
 
 GFile *file;
-uint8_t *save;
 gsize length;
+uint8_t *save;
 SaveData save_data;
 
-GtkWidget *main_window;
-GtkWidget *player_name_entry, *rival_name_entry, *money_entry;
-GtkWidget *bag_list_scrolled, *pc_list_scrolled;
-GtkWidget *bag_list_vbox, *pc_list_vbox;
+ GtkWidget *main_window;
+ GtkWidget *player_name_entry, *rival_name_entry, *money_entry;
+ GtkWidget *bag_list_scrolled, *pc_list_scrolled;
 
 static GtkWidget *create_save_edit_entry(GtkWidget *save_edits_vbox, char *name)
 {
@@ -24,65 +23,6 @@ static GtkWidget *create_save_edit_entry(GtkWidget *save_edits_vbox, char *name)
 
 	return entry;
 }
-
-// static void create_prompted_item(GtkButton *button, GtkWidget *window)
-// {
-// 	GtkWidget *box = gtk_window_get_child(GTK_WINDOW(window));
-// 	GtkWidget *dropdown = gtk_widget_get_first_child(box);
-// 
-// 	int selection_index = gtk_drop_down_get_selected(GTK_DROP_DOWN(dropdown));
-// 	selection_index++;
-// 	int id;
-// 	for(id = 1;; id++)
-// 	{
-// 		if(get_item_info(id).name && --selection_index == 0)
-// 		{
-// 			break;
-// 		}
-// 	}
-// 
-// 	int index = save_data.bag.count++;
-// 	save_data.bag.entries[index].id = id;
-// 	save_data.bag.entries[index].count = 1;
-// 	update_item_tab(bag_list_scrolled, &save_data.bag);
-// 
-// 	gtk_window_destroy(GTK_WINDOW(window));
-// }
-// 
-// static void promt_new_item(GtkButton *button, GtkWidget *list_vbox)
-// {
-// 	GtkWidget *window;
-// 	GtkWidget *dropdown;
-// 	GtkWidget *submit_button;
-// 	GtkStringList *items;
-// 
-// 	items = gtk_string_list_new(NULL);
-// 	for(int i = 1; i <= 256; i++)
-// 	{
-// 		if(get_item_info(i).name)
-// 		{
-// 			gtk_string_list_append(items, get_item_info(i).name);
-// 		}
-// 	}
-// 
-// 	dropdown = gtk_drop_down_new(G_LIST_MODEL(items), NULL);
-// 	gtk_drop_down_set_enable_search(GTK_DROP_DOWN(dropdown), TRUE);
-// 
-// 	window = gtk_window_new();
-// 	gtk_window_set_title(GTK_WINDOW(window), "Choose Item");
-// 	gtk_window_set_modal(GTK_WINDOW(window), TRUE);
-// 	gtk_window_set_transient_for(GTK_WINDOW(window), GTK_WINDOW(main_window));
-// 
-// 	submit_button = gtk_button_new_with_label("Submit");
-// 	g_signal_connect(submit_button, "clicked", G_CALLBACK(create_prompted_item), window);
-// 
-// 	GtkWidget *box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 8);
-// 	gtk_window_set_child(GTK_WINDOW(window), box);
-// 	gtk_box_append(GTK_BOX(box), dropdown);
-// 	gtk_box_append(GTK_BOX(box), submit_button);
-// 
-// 	gtk_window_present(GTK_WINDOW(window));
-// }
 
 static void save_file()
 {
@@ -161,6 +101,7 @@ static void app_activate(GApplication *app)
 	GtkWidget *openf_button, *savef_button;
 	GtkWidget *notebook;
 	GtkWidget *bag_tab_label, *pc_tab_label;
+	GtkWidget *bag_list_vbox, *pc_list_vbox;
 
 	window = gtk_application_window_new(GTK_APPLICATION(app));
 	gtk_window_set_title(GTK_WINDOW(window), "rby edit");

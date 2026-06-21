@@ -1,55 +1,98 @@
 #include "gtk_rbyedit.h"
 
-// static void delete_item_list_entry(GtkButton *button, GtkWidget *entry)
-// {
-// 	int index;
-// 	index = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(entry), "index"));
-// 
-// 	for(int i = index; i < save_data.bag.count - 1; i++)
-// 	{
-// 		save_data.bag.entries[i] = save_data.bag.entries[i+1];
-// 	}
-// 	save_data.bag.count--;
-// 
-// 	bag_list_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-// 	gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(bag_list_scrolled), bag_list_vbox);
-// 
-// 	create_item_list_entries_from_save_data(bag_list_vbox, save_data);
-// }
-
-static void promt_new_item()
+static void add_promted_item(GtkButton *button, List *item_list)
 {
-	return;
+	GtkWidget *promt_window = gtk_widget_get_ancestor(GTK_WIDGET(button), GTK_TYPE_WINDOW);
+	GtkWidget *vbox = gtk_window_get_child(GTK_WINDOW(promt_window));
+	GtkWidget *dropdown = gtk_widget_get_first_child(vbox);
+	GtkWidget *tab_scrolled = g_object_get_data(G_OBJECT(button), "tab-scrolled");
+
+	int selection_index = gtk_drop_down_get_selected(GTK_DROP_DOWN(dropdown));
+	selection_index++;
+	int id;
+	for(id = 1;; id++)
+	{
+		if(get_item_info(id).name && --selection_index == 0)
+		{
+			break;
+		}
+	}
+
+	int index = item_list->count++;
+	item_list->entries[index].id = id;
+	item_list->entries[index].count = 1;
+	
+	update_item_tab(tab_scrolled, item_list);
+	gtk_window_destroy(GTK_WINDOW(promt_window));
 }
 
-static void delete_item_tab_entry()
+static void promt_new_item(GtkButton *button, List *item_list)
 {
-	return;
+	GtkWidget *promt_window, *main_window;
+	GtkWidget *dropdown, *submit_button;
+	GtkWidget *vbox;
+	GtkWidget *tab_scrolled;
+	GtkStringList *item_strings;
+
+	item_strings = gtk_string_list_new(NULL);
+	for(int i = 1; i <= 256; i++)
+	{
+		ItemInfo item = get_item_info(i);
+		if(item.name)
+		{
+			gtk_string_list_append(item_strings, item.name);
+		}
+	}
+
+	main_window = gtk_widget_get_ancestor(GTK_WIDGET(button), GTK_TYPE_WINDOW);
+	promt_window = gtk_window_new();
+	gtk_window_set_title(GTK_WINDOW(promt_window), "Choose Item");
+	gtk_window_set_modal(GTK_WINDOW(promt_window), TRUE);
+	gtk_window_set_transient_for(GTK_WINDOW(promt_window), GTK_WINDOW(main_window));
+
+ 	dropdown = gtk_drop_down_new(G_LIST_MODEL(item_strings), NULL);
+ 	gtk_drop_down_set_enable_search(GTK_DROP_DOWN(dropdown), TRUE);
+
+	tab_scrolled = gtk_widget_get_ancestor(GTK_WIDGET(button), GTK_TYPE_SCROLLED_WINDOW);
+	submit_button = gtk_button_new_with_label("Submit");
+	g_signal_connect(submit_button, "clicked", G_CALLBACK(add_promted_item), item_list);
+	g_object_set_data(G_OBJECT(submit_button), "tab-scrolled", tab_scrolled);
+
+	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 8);
+	gtk_window_set_child(GTK_WINDOW(promt_window), vbox);
+	gtk_box_append(GTK_BOX(vbox), dropdown);
+	gtk_box_append(GTK_BOX(vbox), submit_button);
+
+	gtk_window_present(GTK_WINDOW(promt_window));
+}
+
+static void delete_item(GtkButton *button, List *item_list)
+{
+	GtkWidget *item_entry = gtk_widget_get_parent(GTK_WIDGET(button));
+	GtkWidget *item_spin_button = g_object_get_data(G_OBJECT(item_entry), "spin-button");
+
+	GtkWidget *tab_scrolled = gtk_widget_get_ancestor(item_entry, GTK_TYPE_SCROLLED_WINDOW);
+	int index = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(item_spin_button), "item-index"));
+
+	for(int i = index; i < item_list->count - 1; i++)
+	{
+		item_list->entries[i] = item_list->entries[i + 1];
+	}
+	item_list->count--;
+
+	update_item_tab(tab_scrolled, item_list);
 }
 
 static void edit_item_count(GtkEditable *item_spin_button, List *item_list) 
 {
-	GtkWidget *item_entry = gtk_widget_get_ancestor(GTK_WIDGET(item_spin_button), GTK_TYPE_BOX);
-	GtkWidget *tab_vbox = gtk_widget_get_ancestor(GTK_WIDGET(item_entry), GTK_TYPE_BOX);
+	int index = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(item_spin_button), "item-index"));
+	int count = gtk_spin_button_get_value_as_int(GTK_SPIN_BUTTON(item_spin_button));
 
-	int i;
-
-	GtkWidget *child = gtk_widget_get_first_child(tab_vbox);
-	for(i = 0; child; i++)
-	{
-		if(child == item_entry)
-		{
-			break;
-		}
-
-		child = gtk_widget_get_next_sibling(child);
-	}
-
-	int count = (int)gtk_spin_button_get_value(GTK_SPIN_BUTTON(item_spin_button));
-	item_list->entries[i].count = count;
+	item_list->entries[index].count = count;
 }
 
-static void create_item_tab_entry(GtkWidget *tab_vbox, List *item_list, int id, int count)
+static void create_item_tab_entry(GtkWidget *tab_vbox, List *item_list, int index,
+		int id, int count)
 {
 	GtkWidget *entry_hbox;
 	GtkWidget *item_image, *name_label;
@@ -72,10 +115,12 @@ static void create_item_tab_entry(GtkWidget *tab_vbox, List *item_list, int id, 
 	count_spin_button = gtk_spin_button_new_with_range(1, 99, 1);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(count_spin_button), count);
 	g_signal_connect(count_spin_button, "value-changed", G_CALLBACK(edit_item_count), item_list);
+	g_object_set_data(G_OBJECT(count_spin_button), "item-index", GINT_TO_POINTER(index));
 	gtk_box_append(GTK_BOX(entry_hbox), count_spin_button);
+	g_object_set_data(G_OBJECT(entry_hbox), "spin-button", count_spin_button);
 
 	remove_button = gtk_button_new_from_icon_name("window-close-symbolic");
-	g_signal_connect(remove_button, "clicked", G_CALLBACK(delete_item_tab_entry), entry_hbox);
+	g_signal_connect(remove_button, "clicked", G_CALLBACK(delete_item), item_list);
 	gtk_box_append(GTK_BOX(entry_hbox), remove_button);
 
 	gtk_box_append(GTK_BOX(tab_vbox), entry_hbox);
@@ -89,11 +134,14 @@ void update_item_tab(GtkWidget *tab_scrolled, List *item_list)
 	for(int i = 0; i < item_list->count; i++)
 	{
 		ListEntry item = item_list->entries[i];
-		create_item_tab_entry(tab_vbox, item_list, item.id, item.count);
+		create_item_tab_entry(tab_vbox, item_list, i, item.id, item.count);
 	}
 
-	GtkWidget *new_item_button;
-	new_item_button = gtk_button_new_from_icon_name("list-add-symbolic");
-	g_signal_connect(new_item_button, "clicked", G_CALLBACK(promt_new_item), NULL);
-	gtk_box_append(GTK_BOX(tab_vbox), new_item_button);
+	if(item_list->count < 20)
+	{
+		GtkWidget *new_item_button;
+		new_item_button = gtk_button_new_from_icon_name("list-add-symbolic");
+		g_signal_connect(new_item_button, "clicked", G_CALLBACK(promt_new_item), item_list);
+		gtk_box_append(GTK_BOX(tab_vbox), new_item_button);
+	}
 }
