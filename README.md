@@ -9,6 +9,6 @@ The source code in this repository is licensed under the MIT License.
 Pokémon sprite assets are derived from PokéSprite:
 https://github.com/msikma/pokesprite/
 
-Pokémon sprite images are © Nintendo / Creatures Inc. / GAME FREAK inc.
+Pokémon sprite assets are © Nintendo / Creatures Inc. / GAME FREAK inc.
 
-These sprite assets are not covered by the MIT License and remain the property of their respective copyright holders.
+Pokémon sprite assets are not covered by the MIT License and remain the property of their respective copyright holders.
