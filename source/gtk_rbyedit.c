@@ -7,7 +7,7 @@ SaveData save_data;
 
  GtkWidget *main_window;
  GtkWidget *player_name_entry, *rival_name_entry, *money_entry;
- GtkWidget *bag_list_scrolled, *pc_list_scrolled;
+ GtkWidget *bag_tab_scrolled, *item_box_tab_scrolled, *party_tab_scrolled;
 
 static GtkWidget *create_save_edit_entry(GtkWidget *save_edits_vbox, char *name)
 {
@@ -81,7 +81,9 @@ static void load_file(GObject *file_dialog, GAsyncResult *result, gpointer windo
 	snprintf(str, sizeof(str), "%d", save_data.money);
 	gtk_editable_set_text(GTK_EDITABLE(money_entry), str);
 
-	update_item_tab(bag_list_scrolled, &save_data.bag);
+	update_item_tab(bag_tab_scrolled, &save_data.bag);
+	update_item_tab(item_box_tab_scrolled, &save_data.box_items);
+	update_party_tab(party_tab_scrolled, &save_data.party);
 }
 
 static void open_file(GtkWindow *window)
@@ -100,8 +102,7 @@ static void app_activate(GApplication *app)
 	GtkWidget *toolbar;
 	GtkWidget *openf_button, *savef_button;
 	GtkWidget *notebook;
-	GtkWidget *bag_tab_label, *pc_tab_label;
-	GtkWidget *bag_list_vbox, *pc_list_vbox;
+	GtkWidget *bag_tab_label, *item_boxtab_label, *party_tab_label;
 
 	window = gtk_application_window_new(GTK_APPLICATION(app));
 	gtk_window_set_title(GTK_WINDOW(window), "rby edit");
@@ -145,17 +146,16 @@ static void app_activate(GApplication *app)
 	gtk_box_append(GTK_BOX(hbox), notebook);
 
 	bag_tab_label = gtk_label_new("Bag Items");
-	bag_list_scrolled = gtk_scrolled_window_new();
-	bag_list_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 1);
-	gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(bag_list_scrolled), bag_list_vbox);
-	gtk_notebook_append_page(GTK_NOTEBOOK(notebook), bag_list_scrolled, bag_tab_label);
+	bag_tab_scrolled = gtk_scrolled_window_new();
+	gtk_notebook_append_page(GTK_NOTEBOOK(notebook), bag_tab_scrolled, bag_tab_label);
 
-	pc_tab_label = gtk_label_new("Pc Items");
-	pc_list_scrolled = gtk_scrolled_window_new();
-	pc_list_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 1);
-	gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(pc_list_scrolled), pc_list_vbox);
-	gtk_notebook_append_page(GTK_NOTEBOOK(notebook), pc_list_scrolled, pc_tab_label);
+	item_boxtab_label = gtk_label_new("Pc Items");
+	item_box_tab_scrolled = gtk_scrolled_window_new();
+	gtk_notebook_append_page(GTK_NOTEBOOK(notebook), item_box_tab_scrolled, item_boxtab_label);
 
+	party_tab_label = gtk_label_new("Party");
+	party_tab_scrolled = gtk_scrolled_window_new();
+	gtk_notebook_append_page(GTK_NOTEBOOK(notebook), party_tab_scrolled, party_tab_label);
 
 	gtk_window_present(GTK_WINDOW(window));
 }

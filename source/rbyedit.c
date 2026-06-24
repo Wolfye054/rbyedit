@@ -2,17 +2,18 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define assert(expr) do{if(!(expr)) *(char *)0 = 0;} while(0)
-
 #define CHECKSUM_ADDR 0x3523
 #define CHECKSUM_START_ADDR 0x2598
 #define CHECKSUM_END_ADDR 0x3522
 
 #define PLAYER_NAME_ADDR 0x2598
-#define ENEMY_NAME_ADDR 0x25F6
+#define RIVAL_NAME_ADDR 0x25F6
 #define MONEY_ADDR 0x25F3
 #define BAG_ADDR 0x25C9
+#define BOX_ITEMS_ADDR 0x27E6
+#define POKE_PARTY_ADDR 0x2F2C
 
+// TODO: finish character sets for the ascii conversion functions
 
 static uint8_t ascii_to_rby(uint8_t c)
 {
@@ -36,20 +37,74 @@ static uint8_t rby_to_ascii(uint8_t c)
 	return c;
 }
 
-static List get_bag(uint8_t *save)
+static uint16_t get_int16(uint8_t *save, int address)
+{
+	uint16_t value = *(uint16_t *)(save + address);
+	value = __builtin_bswap16(value);
+	return value;
+}
+
+static uint32_t get_int24(uint8_t *save, int address)
+{
+	// TODO: make this and get_int16 safe
+	uint32_t value = *(uint32_t *)(save + address);
+	value = __builtin_bswap32(value);
+	value = value >> 8;
+	return value;
+}
+
+static Pokemon get_pokemon(uint8_t *save, int address)
+{
+	Pokemon pokemon;
+	pokemon.id = save[address];
+	pokemon.current_hp = get_int16(save, address + 0x01);
+	pokemon.pc_level = save[address + 0x03];
+	pokemon.status =  save[address + 0x04];
+	pokemon.type1 = save[address + 0x05];
+	pokemon.type2 = save[address + 0x06];
+	pokemon.catch_rate = save[address + 0x07];
+	pokemon.move1_id = save[address + 0x08];
+	pokemon.move2_id = save[address + 0x09];
+	pokemon.move3_id = save[address + 0x0A];
+	pokemon.move4_id = save[address + 0x0B];
+	pokemon.og_trainer_id = get_int16(save, address + 0x0C);
+	pokemon.xp = get_int24(save, address + 0X0E);
+	pokemon.hp_stat_xp = get_int16(save, address + 0x11);
+	pokemon.attack_stat_xp = get_int16(save, address + 0x13);
+	pokemon.defense_stat_xp = get_int16(save, address + 0x15);
+	pokemon.speed_stat_xp = get_int16(save, address + 0x17);
+	pokemon.special_stat_xp = get_int16(save, address + 0x19);
+	pokemon.iv = get_int16(save, address + 0x1B);
+	pokemon.move1_pp = save[address + 0x1D];
+	pokemon.move2_pp = save[address + 0x1E];
+	pokemon.move3_pp = save[address + 0x1F];
+	pokemon.move4_pp = save[address + 0x20];
+	pokemon.level = save[address + 0x21];
+	pokemon.max_hp = get_int16(save, address + 0x22);
+	pokemon.attack = get_int16(save, address + 0x24);
+	pokemon.defense = get_int16(save, address + 0x26);
+	pokemon.speed = get_int16(save, address + 0x28);
+	pokemon.special = get_int16(save, address + 0x2A);
+	pokemon.nickname = NULL;
+	pokemon.og_trainer_name = NULL;
+
+	return pokemon;
+}
+
+static List get_list(uint8_t *save, int address, int size)
 {
 	List list;
-	list.count = save[BAG_ADDR];
-	list.entries = malloc(20 * sizeof(ListEntry));
+	list.count = save[address];
+	list.entries = malloc(size * sizeof(ListEntry));
 
-	int addr = BAG_ADDR + 1;
+	address++;
 	for(int i = 0; i < list.count; i++)
 	{
 		ListEntry entry;
-		entry.id = save[addr];
-		entry.count = save[addr + 1];
+		entry.id = save[address];
+		entry.count = save[address + 1];
 		list.entries[i] = entry;
-		addr += 2;
+		address += 2;
 	}
 
 	return list;
@@ -57,9 +112,7 @@ static List get_bag(uint8_t *save)
 
 static int get_money(uint8_t *save)
 {
-	uint32_t bcd = *(uint32_t *)(save + MONEY_ADDR);
-	bcd = __builtin_bswap32(bcd);
-	bcd = bcd >> 8;
+	uint32_t bcd = get_int24(save, MONEY_ADDR);
 	
 	int money = 0;
 	int multiplier = 1;
@@ -74,38 +127,54 @@ static int get_money(uint8_t *save)
 	return money;
 }
 
-static char *get_rival_name(uint8_t *save)
+static char *get_string(uint8_t *save, int address)
 {
-	char *name = malloc(8);
-	assert(name);
+	int size;
+	for(size = 0; save[address + size] != 0x50; size++);
+
+	char *name = malloc(size + 1);
 
 	int i;
-	for(i = 0; save[ENEMY_NAME_ADDR+ i] != 0x50; i++)
+	for(i = 0; i < size; i++)
 	{
-		name[i] = rby_to_ascii(save[ENEMY_NAME_ADDR + i]);
-	}
-	name[i] = '\0';
-
-	return name;
-
-}
-
-static char *get_player_name(uint8_t *save)
-{
-	char *name = malloc(8);
-	assert(name);
-
-	int i;
-	for(i = 0; save[PLAYER_NAME_ADDR + i] != 0x50; i++)
-	{
-		name[i] = rby_to_ascii(save[PLAYER_NAME_ADDR + i]);
+		name[i] = rby_to_ascii(save[address + i]);
 	}
 	name[i] = '\0';
 
 	return name;
 }
 
+static PokemonParty get_party(uint8_t *save)
+{
+	PokemonParty party;
+	int address;
 
+	party.count = save[POKE_PARTY_ADDR];
+	party.pokemon = malloc(6 * sizeof(Pokemon));
+
+	address = POKE_PARTY_ADDR + 0x08;
+	for(int i = 0; i < party.count; i++)
+	{
+		party.pokemon[i] = get_pokemon(save, address);
+		address += 44;
+	}
+	
+	address = POKE_PARTY_ADDR + 0x110;
+	for(int i = 0; i < party.count; i++)
+	{
+		party.pokemon[i].og_trainer_name = get_string(save, address);
+		address += 11;
+	}
+
+	address = POKE_PARTY_ADDR + 0x152;
+	for(int i = 0; i < party.count; i++)
+	{
+		party.pokemon[i].nickname = get_string(save, address);
+		address += 11;
+	}
+
+	return party;
+}
 
 static void set_checksum(uint8_t *save)
 {
@@ -117,29 +186,6 @@ static void set_checksum(uint8_t *save)
 	}
 
 	save[CHECKSUM_ADDR] = ~checksum;
-}
-
-static void set_bag(uint8_t *save, List bag)
-{
-	save[BAG_ADDR] = bag.count;
-	int addr = BAG_ADDR + 1;
-
-	if(bag.count == 0)
-	{
-		save[addr] = 0xFF;
-	}
-	else
-	{
-		for(int i = 0; i < bag.count; i++)
-		{
-			ListEntry entry = bag.entries[i];
-			save[addr] = entry.id;
-			save[addr + 1] = entry.count;
-			addr += 2;
-		}
-
-		save[BAG_ADDR + (2 * bag.count) + 1] = 0xFF;
-	}
 }
 
 static void set_money(uint8_t *save, uint32_t amount)
@@ -160,6 +206,29 @@ static void set_money(uint8_t *save, uint32_t amount)
 	save[MONEY_ADDR + 2] = bcd;
 }
 
+static void write_list(uint8_t *save, int address, List list)
+{
+	save[address] = list.count;
+	int addr = address + 1;
+
+	if(list.count == 0)
+	{
+		save[addr] = 0xFF;
+	}
+	else
+	{
+		for(int i = 0; i < list.count; i++)
+		{
+			ListEntry entry = list.entries[i];
+			save[addr] = entry.id;
+			save[addr + 1] = entry.count;
+			addr += 2;
+		}
+	}
+
+	save[address + (2 * list.count) + 1] = 0XFF;
+}
+
 static void write_string(uint8_t *save, int address, char *string)
 {
 	int i;
@@ -175,19 +244,23 @@ void update_save(uint8_t *save, SaveData save_data)
 {
 	set_money(save, save_data.money);
 	write_string(save, PLAYER_NAME_ADDR, save_data.player_name);
-	write_string(save, ENEMY_NAME_ADDR, save_data.rival_name);
-	set_bag(save, save_data.bag);
+	write_string(save, RIVAL_NAME_ADDR, save_data.rival_name);
+	write_list(save, BAG_ADDR, save_data.bag);
+	write_list(save, BOX_ITEMS_ADDR, save_data.box_items);
 	set_checksum(save);
 }
 
 SaveData get_save_data(uint8_t *save)
 {
+	// TODO: check if the passed save is a valid rby save file.
 	SaveData save_data;
 	
-	save_data.rival_name = get_rival_name(save);
-	save_data.player_name = get_player_name(save);
+	save_data.rival_name = get_string(save, RIVAL_NAME_ADDR);
+	save_data.player_name = get_string(save, PLAYER_NAME_ADDR);
 	save_data.money = get_money(save);
-	save_data.bag = get_bag(save);
+	save_data.bag = get_list(save, BAG_ADDR, 20);
+	save_data.box_items = get_list(save, BOX_ITEMS_ADDR, 50);
+	save_data.party = get_party(save);
 
 	return save_data;
 }

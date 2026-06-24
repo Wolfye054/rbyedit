@@ -91,6 +91,31 @@ static void edit_item_count(GtkEditable *item_spin_button, List *item_list)
 	item_list->entries[index].count = count;
 }
 
+static void create_pokemon_tab_entry(GtkWidget *tab_vbox, Pokemon *pokemon_group,
+	int index, Pokemon *pokemon)
+{
+	GtkWidget *entry_hbox;
+	GtkWidget *pokemon_image, *name_label;
+
+	PokemonInfo pokemon_info = get_pokemon_info(pokemon->id);
+
+	entry_hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+	gtk_widget_set_hexpand(entry_hbox, TRUE);
+
+	gchar *full_path = g_build_filename("..", "assets", "pokemon", pokemon_info.filename, NULL);
+	GFile *file = g_file_new_for_path(full_path);
+	pokemon_image = gtk_picture_new_for_file(file);
+	gtk_picture_set_content_fit	(GTK_PICTURE(pokemon_image), GTK_CONTENT_FIT_CONTAIN);
+	gtk_widget_set_size_request(pokemon_image, 68, 56);
+	gtk_box_append(GTK_BOX(entry_hbox), pokemon_image);
+	g_free(full_path);
+
+	name_label = gtk_label_new(pokemon_info.name);
+	gtk_box_append(GTK_BOX(entry_hbox), name_label);
+
+	gtk_box_append(GTK_BOX(tab_vbox), entry_hbox);
+}
+
 static void create_item_tab_entry(GtkWidget *tab_vbox, List *item_list, int index,
 		int id, int count)
 {
@@ -103,7 +128,7 @@ static void create_item_tab_entry(GtkWidget *tab_vbox, List *item_list, int inde
 	entry_hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_widget_set_hexpand(entry_hbox, TRUE);
 
-	gchar *full_path = g_build_filename("..", "assets", item.filename, NULL);
+	gchar *full_path = g_build_filename("..", "assets", "item", item.filename, NULL);
 	item_image = gtk_image_new_from_file(full_path);
 	gtk_image_set_pixel_size(GTK_IMAGE(item_image), 64);
 	gtk_box_append(GTK_BOX(entry_hbox), item_image);
@@ -143,5 +168,17 @@ void update_item_tab(GtkWidget *tab_scrolled, List *item_list)
 		new_item_button = gtk_button_new_from_icon_name("list-add-symbolic");
 		g_signal_connect(new_item_button, "clicked", G_CALLBACK(promt_new_item), item_list);
 		gtk_box_append(GTK_BOX(tab_vbox), new_item_button);
+	}
+}
+
+void update_party_tab(GtkWidget *tab_scrolled, PokemonParty *party)
+{
+	GtkWidget *tab_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+	gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(tab_scrolled), tab_vbox);
+
+	for(int i = 0; i < party->count; i++)
+	{
+		Pokemon pokemon = party->pokemon[i];
+		create_pokemon_tab_entry(tab_vbox, party->pokemon, i, &pokemon);
 	}
 }

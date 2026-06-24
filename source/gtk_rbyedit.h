@@ -1,6 +1,6 @@
 #include <gtk/gtk.h>
 #include "rbyedit.h"
-#include "iteminfo.h"
+#include "pokeinfo.h"
 
 typedef struct
 {
@@ -10,3 +10,4 @@ typedef struct
 } AppWidgets;
 
 void update_item_tab(GtkWidget *tab_scrolled, List *item_list);
+void update_party_tab(GtkWidget *tab_scrolled, PokemonParty *party);
