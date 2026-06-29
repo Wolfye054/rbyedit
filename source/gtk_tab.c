@@ -182,3 +182,26 @@ void update_party_tab(GtkWidget *tab_scrolled, PokemonParty *party)
 		create_pokemon_tab_entry(tab_vbox, party->pokemon, i, &pokemon);
 	}
 }
+
+void update_pokemon_box_tab(GtkWidget *tab_scrolled, PokemonBox *boxes)
+{
+	GtkWidget *tab_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+	gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(tab_scrolled), tab_vbox);
+
+	char buffer[10];
+	for(int i = 0; i < 12; i++)
+	{
+		if(boxes[i].count > 0)
+		{
+			snprintf(buffer, sizeof(buffer), "Box %d", i + 1);
+			GtkWidget *box_label = gtk_label_new(buffer);
+			gtk_box_append(GTK_BOX(tab_vbox), box_label);
+
+			for(int j = 0; j < boxes[i].count; j++)
+			{
+				Pokemon pokemon = boxes[i].pokemon[j];
+				create_pokemon_tab_entry(tab_vbox, boxes[i].pokemon, i, &pokemon);
+			}
+		}
+	}
+}

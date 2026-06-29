@@ -5,9 +5,10 @@ gsize length;
 uint8_t *save;
 SaveData save_data;
 
- GtkWidget *main_window;
- GtkWidget *player_name_entry, *rival_name_entry, *money_entry;
- GtkWidget *bag_tab_scrolled, *item_box_tab_scrolled, *party_tab_scrolled;
+GtkWidget *main_window;
+GtkWidget *player_name_entry, *rival_name_entry, *money_entry;
+GtkWidget *bag_tab_scrolled, *item_box_tab_scrolled;
+GtkWidget *party_tab_scrolled, *pokemon_box_tab_scrolled;
 
 static GtkWidget *create_save_edit_entry(GtkWidget *save_edits_vbox, char *name)
 {
@@ -84,6 +85,7 @@ static void load_file(GObject *file_dialog, GAsyncResult *result, gpointer windo
 	update_item_tab(bag_tab_scrolled, &save_data.bag);
 	update_item_tab(item_box_tab_scrolled, &save_data.box_items);
 	update_party_tab(party_tab_scrolled, &save_data.party);
+	update_pokemon_box_tab(pokemon_box_tab_scrolled, save_data.pokemon_boxes);
 }
 
 static void open_file(GtkWindow *window)
@@ -102,7 +104,8 @@ static void app_activate(GApplication *app)
 	GtkWidget *toolbar;
 	GtkWidget *openf_button, *savef_button;
 	GtkWidget *notebook;
-	GtkWidget *bag_tab_label, *item_boxtab_label, *party_tab_label;
+	GtkWidget *bag_tab_label, *item_box_tab_label;
+	GtkWidget *party_tab_label, *pokemon_box_tab_label;
 
 	window = gtk_application_window_new(GTK_APPLICATION(app));
 	gtk_window_set_title(GTK_WINDOW(window), "rby edit");
@@ -149,13 +152,18 @@ static void app_activate(GApplication *app)
 	bag_tab_scrolled = gtk_scrolled_window_new();
 	gtk_notebook_append_page(GTK_NOTEBOOK(notebook), bag_tab_scrolled, bag_tab_label);
 
-	item_boxtab_label = gtk_label_new("Pc Items");
+	item_box_tab_label = gtk_label_new("Pc Items");
 	item_box_tab_scrolled = gtk_scrolled_window_new();
-	gtk_notebook_append_page(GTK_NOTEBOOK(notebook), item_box_tab_scrolled, item_boxtab_label);
+	gtk_notebook_append_page(GTK_NOTEBOOK(notebook), item_box_tab_scrolled, item_box_tab_label);
 
 	party_tab_label = gtk_label_new("Party");
 	party_tab_scrolled = gtk_scrolled_window_new();
 	gtk_notebook_append_page(GTK_NOTEBOOK(notebook), party_tab_scrolled, party_tab_label);
+
+	pokemon_box_tab_label = gtk_label_new("Pokemon Boxes");
+	pokemon_box_tab_scrolled = gtk_scrolled_window_new();
+	gtk_notebook_append_page(GTK_NOTEBOOK(notebook), pokemon_box_tab_scrolled,
+			pokemon_box_tab_label);
 
 	gtk_window_present(GTK_WINDOW(window));
 }

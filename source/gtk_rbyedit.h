@@ -11,3 +11,4 @@ typedef struct
 
 void update_item_tab(GtkWidget *tab_scrolled, List *item_list);
 void update_party_tab(GtkWidget *tab_scrolled, PokemonParty *party);
+void update_pokemon_box_tab(GtkWidget *tab_scrolled, PokemonBox *boxes);

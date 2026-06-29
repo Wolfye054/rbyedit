@@ -12,6 +12,10 @@
 #define BAG_ADDR 0x25C9
 #define BOX_ITEMS_ADDR 0x27E6
 #define POKE_PARTY_ADDR 0x2F2C
+#define POKE_BOXES_ADDR_1 0x4000
+#define POKE_BOXES_ADDR_2 0x6000
+#define CURRENT_BOX_ADDR 0x284C
+#define CURRENT_BOX_DATA_ADDR 0x30C0
 
 // TODO: finish character sets for the ascii conversion functions
 
@@ -53,6 +57,11 @@ static uint32_t get_int24(uint8_t *save, int address)
 	return value;
 }
 
+static void set_derived_values(Pokemon *pokemon)
+{
+	return;
+}
+
 static Pokemon get_pokemon(uint8_t *save, int address)
 {
 	Pokemon pokemon;
@@ -69,24 +78,45 @@ static Pokemon get_pokemon(uint8_t *save, int address)
 	pokemon.move4_id = save[address + 0x0B];
 	pokemon.og_trainer_id = get_int16(save, address + 0x0C);
 	pokemon.xp = get_int24(save, address + 0X0E);
-	pokemon.hp_stat_xp = get_int16(save, address + 0x11);
-	pokemon.attack_stat_xp = get_int16(save, address + 0x13);
-	pokemon.defense_stat_xp = get_int16(save, address + 0x15);
-	pokemon.speed_stat_xp = get_int16(save, address + 0x17);
-	pokemon.special_stat_xp = get_int16(save, address + 0x19);
-	pokemon.iv = get_int16(save, address + 0x1B);
+	pokemon.hp_xp = get_int16(save, address + 0x11);
+	pokemon.attack_xp = get_int16(save, address + 0x13);
+	pokemon.defense_xp = get_int16(save, address + 0x15);
+	pokemon.speed_xp = get_int16(save, address + 0x17);
+	pokemon.special_xp = get_int16(save, address + 0x19);
+
+	// each iv is four bits in size, and hp iv is composed of the
+	// least significant bit of attack, defense, speed, and special ivs
+	// in that order.
+	uint16_t iv_values = get_int16(save, address + 0x1B);
+	
+	// TODO: check if these are the correct positions for iv values
+	uint8_t attack_iv = (iv_values >> 12) & 0x0F;
+	uint8_t defense_iv = (iv_values >> 8) & 0x0F;
+	uint8_t speed_iv = (iv_values >> 4) & 0x0F;
+	uint8_t special_iv = iv_values & 0x0F;
+
+	pokemon.hp_iv =
+		((attack_iv & 0x01) << 3)  |
+		((defense_iv & 0x01) << 2) |
+		((speed_iv & 0x01) << 1)   |
+		(special_iv & 0x01);
+
+	pokemon.attack_iv = attack_iv;
+	pokemon.defense_iv = defense_iv;
+	pokemon.speed_iv = speed_iv;
+	pokemon.special_iv = special_iv;
+
 	pokemon.move1_pp = save[address + 0x1D];
 	pokemon.move2_pp = save[address + 0x1E];
 	pokemon.move3_pp = save[address + 0x1F];
 	pokemon.move4_pp = save[address + 0x20];
-	pokemon.level = save[address + 0x21];
-	pokemon.max_hp = get_int16(save, address + 0x22);
-	pokemon.attack = get_int16(save, address + 0x24);
-	pokemon.defense = get_int16(save, address + 0x26);
-	pokemon.speed = get_int16(save, address + 0x28);
-	pokemon.special = get_int16(save, address + 0x2A);
+
+	// nickname and trainer name are stored seperatly from the pokemon data,
+	// so the caller needs to set them.
 	pokemon.nickname = NULL;
 	pokemon.og_trainer_name = NULL;
+
+	set_derived_values(&pokemon);
 
 	return pokemon;
 }
@@ -176,6 +206,53 @@ static PokemonParty get_party(uint8_t *save)
 	return party;
 }
 
+static PokemonBox get_pokemon_box(uint8_t *save, int address)
+{
+	PokemonBox box;
+	box.count = save[address];
+	box.pokemon = malloc(20 * sizeof(Pokemon));
+
+	address += 0x16;
+	for(int i = 0; i < box.count; i++)
+	{
+		box.pokemon[i] = get_pokemon(save, address);
+		address += 0x21;
+	}
+
+	return box;
+}
+
+static PokemonBox *get_pokemon_boxes(uint8_t *save)
+{
+	// TODO: currently getting trash data for derived values.
+	PokemonBox *boxes = malloc(12 * sizeof(PokemonBox));
+
+	// only the first 7 bits represent the box number, bit 8 checks whether the player
+	// has changed boxes before.
+	int active_box = save[CURRENT_BOX_ADDR] & 0x7F;
+
+	int address = POKE_BOXES_ADDR_1;
+	for(int i = 0; i < 12; i++)
+	{
+		// the boxes are split up in different banks and we need to jump
+		// to the next one when we get to index 6
+		if(i == 6) address = POKE_BOXES_ADDR_2;
+
+		if(i == active_box)
+		{
+			boxes[i] = get_pokemon_box(save, CURRENT_BOX_DATA_ADDR);
+		}
+		else
+		{
+			boxes[i] = get_pokemon_box(save, address);
+		}
+
+		address += 0x462;
+	}
+
+	return boxes;
+}
+
 static void set_checksum(uint8_t *save)
 {
 	uint8_t checksum = 0;
@@ -253,6 +330,7 @@ void update_save(uint8_t *save, SaveData save_data)
 SaveData get_save_data(uint8_t *save)
 {
 	// TODO: check if the passed save is a valid rby save file.
+	// TODO: free old save_data memory
 	SaveData save_data;
 	
 	save_data.rival_name = get_string(save, RIVAL_NAME_ADDR);
@@ -261,6 +339,7 @@ SaveData get_save_data(uint8_t *save)
 	save_data.bag = get_list(save, BAG_ADDR, 20);
 	save_data.box_items = get_list(save, BOX_ITEMS_ADDR, 50);
 	save_data.party = get_party(save);
+	save_data.pokemon_boxes = get_pokemon_boxes(save);
 
 	return save_data;
 }
