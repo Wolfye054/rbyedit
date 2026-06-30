@@ -171,7 +171,7 @@ Info pokemon[191] =
 	[40] = {.name="Chansey", .filename="chansey.png"},
 	[41] = {.name="Machoke", .filename="machoke.png"},
 	[42] = {.name="Mr. Mime", .filename="mr-mime.png"},
-	[43] = {.name="Mitmonlee", .filename="hitmonlee.png"},
+	[43] = {.name="Hitmonlee", .filename="hitmonlee.png"},
 	[44] = {.name="Hitmonchan", .filename="hitmonchand.png"},
 	[45] = {.name="Arbok", .filename="arbok.png"},
 	[46] = {.name="Parasect", .filename="parasect.png"},
@@ -286,158 +286,159 @@ Info pokemon[191] =
 
 static PokemonBaseStats pokemon_stats[] =
 {
-	[1] = {.hp=105, .attack=130, .defense=120, .speed=40, .special=45},
-	[2] = {.hp=105, .attack=95, .defense=80, .speed=90, .special=40},
-	[3] = {.hp=46, .attack=57, .defense=40, .speed=50, .special=40},
-	[4] = {.hp=70, .attack=45, .defense=48, .speed=35, .special=60},
-	[5] = {.hp=40, .attack=60, .defense=30, .speed=70, .special=31},
-	[6] = {.hp=40, .attack=30, .defense=50, .speed=100, .special=55},
-	[7] = {.hp=81, .attack=92, .defense=77, .speed=85, .special=75},
-	[8] = {.hp=95, .attack=75, .defense=110, .speed=30, .special=80},
-	[9] = {.hp=60, .attack=62, .defense=63, .speed=60, .special=80},
-	[10] = {.hp=95, .attack=95, .defense=85, .speed=55, .special=125},
-	[11] = {.hp=90, .attack=55, .defense=75, .speed=30, .special=60},
-	[12] = {.hp=60, .attack=40, .defense=80, .speed=40, .special=60},
-	[13] = {.hp=80, .attack=80, .defense=50, .speed=25, .special=40},
-	[14] = {.hp=60, .attack=65, .defense=60, .speed=110, .special=130},
-	[15] = {.hp=55, .attack=47, .defense=52, .speed=41, .special=40},
-	[16] = {.hp=90, .attack=82, .defense=87, .speed=76, .special=75},
-	[17] = {.hp=50, .attack=50, .defense=95, .speed=35, .special=40},
-	[18] = {.hp=80, .attack=85, .defense=95, .speed=25, .special=30},
-	[19] = {.hp=130, .attack=85, .defense=80, .speed=60, .special=95},
-	[20] = {.hp=90, .attack=110, .defense=80, .speed=95, .special=80},
-	[21] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[22] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[23] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[24] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[25] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[26] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[27] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[28] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[29] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[30] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[33] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[34] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[35] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[36] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[37] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[38] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[39] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[40] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[41] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[42] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[43] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[44] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[45] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[46] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[47] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[48] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[49] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[51] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[53] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[54] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[55] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[57] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[58] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[59] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[60] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[64] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[65] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[66] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[70] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[71] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[72] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[73] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[74] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[75] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[76] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[77] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[78] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[82] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[83] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[84] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[85] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[88] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[89] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[90] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[91] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[92] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[93] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[96] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[97] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[98] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[99] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[100] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[101] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[102] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[103] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[104] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[105] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[106] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[107] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[108] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[109] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[110] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[111] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[112] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[113] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[114] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[116] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[117] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[118] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[119] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[120] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[123] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[124] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[125] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[126] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[128] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[129] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[130] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[131] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[132] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[133] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[136] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[138] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[139] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[141] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[142] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[143] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[144] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[145] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[147] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[148] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[149] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[150] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[151] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[152] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[153] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[154] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[155] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[157] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[158] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[163] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[164] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[165] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[166] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[167] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[168] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[169] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[170] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[171] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[173] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[176] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[177] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[178] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[179] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[180] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[185] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[186] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[187] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[188] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[189] = {.hp=, .attack=, .defense=, .speed=, .special=},
-	[190] = {.hp=, .attack=, .defense=, .speed=, .special=},
-}
+	[1] = {.hp=105, .attack=130, .defense=120, .speed=40, .special=45, .growth_rate=SLOW}, // Rhydon
+	[2] = {.hp=105, .attack=95, .defense=80, .speed=90, .special=40, .growth_rate=MEDIUM_FAST}, // Kangaskhan
+	[3] = {.hp=46, .attack=57, .defense=40, .speed=50, .special=40, .growth_rate=MEDIUM_SLOW}, // Nidoran M
+	[4] = {.hp=70, .attack=45, .defense=48, .speed=35, .special=60, .growth_rate=FAST}, // Clefairy
+	[5] = {.hp=40, .attack=60, .defense=30, .speed=70, .special=31, .growth_rate=MEDIUM_FAST}, // Spearow
+	[6] = {.hp=40, .attack=30, .defense=50, .speed=100, .special=55, .growth_rate=MEDIUM_FAST}, // Voltorb
+	[7] = {.hp=81, .attack=92, .defense=77, .speed=85, .special=75, .growth_rate=MEDIUM_SLOW}, // Nidoking
+	[8] = {.hp=95, .attack=75, .defense=110, .speed=30, .special=80, .growth_rate=MEDIUM_FAST}, // Slowbro
+	[9] = {.hp=60, .attack=62, .defense=63, .speed=60, .special=80, .growth_rate=MEDIUM_SLOW}, // Ivysaur
+	[10] = {.hp=95, .attack=95, .defense=85, .speed=55, .special=125, .growth_rate=SLOW}, // Exeggutor
+	[11] = {.hp=90, .attack=55, .defense=75, .speed=30, .special=60, .growth_rate=MEDIUM_FAST}, // Lickitung
+	[12] = {.hp=60, .attack=40, .defense=80, .speed=40, .special=60, .growth_rate=SLOW}, // Exeggcute
+	[13] = {.hp=80, .attack=80, .defense=50, .speed=25, .special=40, .growth_rate=MEDIUM_FAST}, // Grimer
+	[14] = {.hp=60, .attack=65, .defense=60, .speed=110, .special=130, .growth_rate=MEDIUM_SLOW}, // Gengar
+	[15] = {.hp=55, .attack=47, .defense=52, .speed=41, .special=40, .growth_rate=MEDIUM_SLOW}, // Nidoran F
+	[16] = {.hp=90, .attack=82, .defense=87, .speed=76, .special=75, .growth_rate=MEDIUM_SLOW}, // Nidoqueen
+	[17] = {.hp=50, .attack=50, .defense=95, .speed=35, .special=40, .growth_rate=MEDIUM_FAST}, // Cubone
+	[18] = {.hp=80, .attack=85, .defense=95, .speed=25, .special=30, .growth_rate=SLOW}, // Rhyhorn
+	[19] = {.hp=130, .attack=85, .defense=80, .speed=60, .special=95, .growth_rate=SLOW}, // Lapras
+	[20] = {.hp=90, .attack=110, .defense=80, .speed=95, .special=80, .growth_rate=SLOW}, // Arcanine
+	[21] = {.hp=100, .attack=100, .defense=100, .speed=100, .special=100, .growth_rate=SLOW}, // Mew
+	[22] = {.hp=95, .attack=125, .defense=79, .speed=81, .special=100, .growth_rate=SLOW}, // Gyarados
+	[23] = {.hp=30, .attack=65, .defense=100, .speed=40, .special=45, .growth_rate=SLOW}, // Shellder
+	[24] = {.hp=40, .attack=40, .defense=35, .speed=70, .special=100, .growth_rate=SLOW}, // Tentacool
+	[25] = {.hp=30, .attack=35, .defense=30, .speed=80, .special=100, .growth_rate=MEDIUM_SLOW}, // Gastly
+	[26] = {.hp=70, .attack=110, .defense=80, .speed=105, .special=55, .growth_rate=MEDIUM_FAST}, // Scyther
+	[27] = {.hp=30, .attack=45, .defense=55, .speed=85, .special=70, .growth_rate=SLOW}, // Staryu
+	[28] = {.hp=79, .attack=83, .defense=100, .speed=78, .special=85, .growth_rate=MEDIUM_SLOW}, // Blastoise
+	[29] = {.hp=65, .attack=125, .defense=100, .speed=85, .special=55, .growth_rate=SLOW}, // Pinsir
+	[30] = {.hp=65, .attack=55, .defense=115, .speed=60, .special=100, .growth_rate=MEDIUM_FAST}, // Tangela
+	[33] = {.hp=55, .attack=70, .defense=45, .speed=60, .special=50, .growth_rate=SLOW}, // Growlithe
+	[34] = {.hp=35, .attack=45, .defense=160, .speed=70, .special=30, .growth_rate=MEDIUM_FAST}, // Onix
+	[35] = {.hp=65, .attack=90, .defense=65, .speed=100, .special=61, .growth_rate=MEDIUM_FAST}, // Fearow
+	[36] = {.hp=40, .attack=45, .defense=40, .speed=56, .special=35, .growth_rate=MEDIUM_SLOW}, // Pidgey
+	[37] = {.hp=90, .attack=65, .defense=65, .speed=15, .special=40, .growth_rate=MEDIUM_FAST}, // Slowpoke
+	[38] = {.hp=40, .attack=35, .defense=30, .speed=105, .special=120, .growth_rate=MEDIUM_SLOW}, // Kadabra
+	[39] = {.hp=55, .attack=95, .defense=115, .speed=35, .special=45, .growth_rate=MEDIUM_SLOW}, // Graveler
+	[40] = {.hp=250, .attack=5, .defense=5, .speed=50, .special=105, .growth_rate=FAST}, // Chansey
+	[41] = {.hp=80, .attack=100, .defense=70, .speed=45, .special=50, .growth_rate=MEDIUM_SLOW}, // Machoke
+	[42] = {.hp=40, .attack=45, .defense=65, .speed=90, .special=100, .growth_rate=MEDIUM_FAST}, // Mr. Mime
+	[43] = {.hp=50, .attack=120, .defense=53, .speed=87, .special=35, .growth_rate=MEDIUM_FAST}, // Hitmonlee
+	[44] = {.hp=50, .attack=105, .defense=79, .speed=76, .special=35, .growth_rate=MEDIUM_FAST}, // Hitmonchan
+	[45] = {.hp=60, .attack=85, .defense=69, .speed=80, .special=65, .growth_rate=MEDIUM_FAST}, // Arbok
+	[46] = {.hp=60, .attack=95, .defense=80, .speed=30, .special=80, .growth_rate=MEDIUM_FAST}, // Parasect
+	[47] = {.hp=50, .attack=52, .defense=48, .speed=55, .special=50, .growth_rate=MEDIUM_FAST}, // Psyduck
+	[48] = {.hp=60, .attack=48, .defense=45, .speed=42, .special=90, .growth_rate=MEDIUM_FAST}, // Drowzee
+	[49] = {.hp=80, .attack=110, .defense=130, .speed=45, .special=55, .growth_rate=MEDIUM_SLOW}, // Golem
+	[51] = {.hp=65, .attack=95, .defense=57, .speed=93, .special=85, .growth_rate=MEDIUM_FAST}, // Magmar
+	[53] = {.hp=65, .attack=83, .defense=57, .speed=105, .special=85, .growth_rate=MEDIUM_FAST}, // Electabuzz
+	[54] = {.hp=50, .attack=60, .defense=95, .speed=70, .special=120, .growth_rate=MEDIUM_FAST}, // Magneton
+	[55] = {.hp=40, .attack=65, .defense=95, .speed=35, .special=60, .growth_rate=MEDIUM_FAST}, // Koffing
+	[57] = {.hp=40, .attack=80, .defense=35, .speed=70, .special=35, .growth_rate=MEDIUM_FAST}, // Mankey
+	[58] = {.hp=65, .attack=45, .defense=55, .speed=45, .special=70, .growth_rate=MEDIUM_FAST}, // Seel
+	[59] = {.hp=10, .attack=55, .defense=25, .speed=95, .special=45, .growth_rate=MEDIUM_FAST}, // Diglett
+	[60] = {.hp=75, .attack=100, .defense=95, .speed=110, .special=70, .growth_rate=SLOW}, // Tauros
+	[64] = {.hp=52, .attack=65, .defense=55, .speed=60, .special=58, .growth_rate=MEDIUM_FAST}, // Farfetch'd
+	[65] = {.hp=60, .attack=55, .defense=50, .speed=45, .special=40, .growth_rate=MEDIUM_FAST}, // Venonat
+	[66] = {.hp=91, .attack=134, .defense=95, .speed=80, .special=100, .growth_rate=SLOW}, // Dragonite
+	[70] = {.hp=35, .attack=85, .defense=45, .speed=75, .special=35, .growth_rate=MEDIUM_FAST}, // Doduo
+	[71] = {.hp=40, .attack=50, .defense=40, .speed=90, .special=40, .growth_rate=MEDIUM_SLOW}, // Poliwag
+	[72] = {.hp=65, .attack=50, .defense=35, .speed=95, .special=95, .growth_rate=MEDIUM_FAST}, // Jynx
+	[73] = {.hp=90, .attack=100, .defense=90, .speed=90, .special=125, .growth_rate=SLOW}, // Moltres
+	[74] = {.hp=90, .attack=85, .defense=100, .speed=85, .special=125, .growth_rate=SLOW}, // Articuno
+	[75] = {.hp=90, .attack=90, .defense=85, .speed=100, .special=125, .growth_rate=SLOW}, // Zapdos
+	[76] = {.hp=48, .attack=48, .defense=48, .speed=48, .special=48, .growth_rate=MEDIUM_FAST}, // Ditto
+	[77] = {.hp=40, .attack=45, .defense=35, .speed=90, .special=40, .growth_rate=MEDIUM_FAST}, // Meowth
+	[78] = {.hp=30, .attack=105, .defense=90, .speed=50, .special=25, .growth_rate=MEDIUM_FAST}, // Krabby
+	[82] = {.hp=38, .attack=41, .defense=40, .speed=65, .special=65, .growth_rate=MEDIUM_FAST}, // Vulpix
+	[83] = {.hp=73, .attack=76, .defense=75, .speed=100, .special=100, .growth_rate=MEDIUM_FAST}, // Ninetales
+	[84] = {.hp=35, .attack=55, .defense=30, .speed=90, .special=50, .growth_rate=MEDIUM_FAST}, // Pikachu
+	[85] = {.hp=60, .attack=90, .defense=55, .speed=100, .special=90, .growth_rate=MEDIUM_FAST}, // Raichu
+	[88] = {.hp=41, .attack=64, .defense=45, .speed=50, .special=50, .growth_rate=SLOW}, // Dratini
+	[89] = {.hp=61, .attack=84, .defense=65, .speed=70, .special=70, .growth_rate=SLOW}, // Dragonair
+	[90] = {.hp=30, .attack=80, .defense=90, .speed=55, .special=45, .growth_rate=MEDIUM_FAST}, // Kabuto
+	[91] = {.hp=60, .attack=115, .defense=105, .speed=80, .special=70, .growth_rate=MEDIUM_FAST}, // Kabutops
+	[92] = {.hp=30, .attack=40, .defense=70, .speed=60, .special=70, .growth_rate=MEDIUM_FAST}, // Horsea
+	[93] = {.hp=55, .attack=65, .defense=95, .speed=85, .special=95, .growth_rate=MEDIUM_FAST}, // Seadra
+	[96] = {.hp=50, .attack=75, .defense=85, .speed=40, .special=30, .growth_rate=MEDIUM_FAST}, // Sandshrew
+	[97] = {.hp=75, .attack=100, .defense=110, .speed=65, .special=55, .growth_rate=MEDIUM_FAST}, // Sandslash
+	[98] = {.hp=35, .attack=40, .defense=100, .speed=35, .special=90, .growth_rate=MEDIUM_FAST}, // Omanyte
+	[99] = {.hp=70, .attack=60, .defense=125, .speed=55, .special=115, .growth_rate=MEDIUM_FAST}, // Omastar
+	[100] = {.hp=115, .attack=45, .defense=20, .speed=20, .special=25, .growth_rate=FAST}, // Jigglypuff
+	[101] = {.hp=140, .attack=70, .defense=45, .speed=45, .special=50, .growth_rate=FAST}, // Wigglytuff
+	[102] = {.hp=55, .attack=55, .defense=50, .speed=55, .special=65, .growth_rate=MEDIUM_FAST}, // Eevee
+	[103] = {.hp=65, .attack=130, .defense=60, .speed=65, .special=110, .growth_rate=MEDIUM_FAST}, // Flareon
+	[104] = {.hp=65, .attack=65, .defense=60, .speed=130, .special=110, .growth_rate=MEDIUM_FAST}, // Jolteon
+	[105] = {.hp=130, .attack=65, .defense=60, .speed=65, .special=110, .growth_rate=MEDIUM_FAST}, // Vaporeon
+	[106] = {.hp=70, .attack=80, .defense=50, .speed=35, .special=35, .growth_rate=MEDIUM_SLOW}, // Machop
+	[107] = {.hp=40, .attack=45, .defense=35, .speed=55, .special=40, .growth_rate=MEDIUM_FAST}, // Zubat
+	[108] = {.hp=35, .attack=60, .defense=44, .speed=55, .special=40, .growth_rate=MEDIUM_FAST}, // Ekans
+	[109] = {.hp=35, .attack=70, .defense=55, .speed=25, .special=55, .growth_rate=MEDIUM_FAST}, // Paras
+	[110] = {.hp=65, .attack=65, .defense=65, .speed=90, .special=50, .growth_rate=MEDIUM_SLOW}, // Poliwhirl
+	[111] = {.hp=90, .attack=85, .defense=95, .speed=70, .special=70, .growth_rate=MEDIUM_SLOW}, // Poliwrath
+	[112] = {.hp=40, .attack=35, .defense=30, .speed=50, .special=20, .growth_rate=MEDIUM_FAST}, // Weedle
+	[113] = {.hp=45, .attack=25, .defense=50, .speed=35, .special=25, .growth_rate=MEDIUM_FAST}, // Kakuna
+	[114] = {.hp=65, .attack=80, .defense=40, .speed=75, .special=45, .growth_rate=MEDIUM_FAST}, // Beedrill
+	[116] = {.hp=60, .attack=110, .defense=70, .speed=100, .special=60, .growth_rate=MEDIUM_FAST}, // Dodrio
+	[117] = {.hp=65, .attack=105, .defense=60, .speed=95, .special=60, .growth_rate=MEDIUM_FAST}, // Primeape
+	[118] = {.hp=35, .attack=80, .defense=50, .speed=120, .special=70, .growth_rate=MEDIUM_FAST}, // Dugtrio
+	[119] = {.hp=70, .attack=65, .defense=60, .speed=90, .special=90, .growth_rate=MEDIUM_FAST}, // Venomoth
+	[120] = {.hp=90, .attack=70, .defense=80, .speed=70, .special=95, .growth_rate=MEDIUM_FAST}, // Dewgong
+	[123] = {.hp=45, .attack=30, .defense=35, .speed=45, .special=20, .growth_rate=MEDIUM_FAST}, // Caterpie
+	[124] = {.hp=50, .attack=20, .defense=55, .speed=30, .special=25, .growth_rate=MEDIUM_FAST}, // Metapod
+	[125] = {.hp=60, .attack=45, .defense=50, .speed=70, .special=80, .growth_rate=MEDIUM_FAST}, // Butterfree
+	[126] = {.hp=90, .attack=130, .defense=80, .speed=55, .special=65, .growth_rate=MEDIUM_SLOW}, // Machamp
+	[128] = {.hp=80, .attack=82, .defense=78, .speed=85, .special=80, .growth_rate=MEDIUM_FAST}, // Golduck
+	[129] = {.hp=85, .attack=73, .defense=70, .speed=67, .special=115, .growth_rate=MEDIUM_FAST}, // Hypno
+	[130] = {.hp=75, .attack=80, .defense=70, .speed=90, .special=75, .growth_rate=MEDIUM_FAST}, // Golbat
+	[131] = {.hp=106, .attack=110, .defense=90, .speed=130, .special=154, .growth_rate=SLOW}, // Mewtwo
+	[132] = {.hp=160, .attack=110, .defense=65, .speed=30, .special=65, .growth_rate=SLOW}, // Snorlax
+	[133] = {.hp=20, .attack=10, .defense=55, .speed=80, .special=20, .growth_rate=SLOW}, // Magikarp
+	[136] = {.hp=105, .attack=105, .defense=75, .speed=50, .special=65, .growth_rate=MEDIUM_FAST}, // Muk
+	[138] = {.hp=55, .attack=130, .defense=115, .speed=75, .special=50, .growth_rate=MEDIUM_FAST}, // Kingler
+	[139] = {.hp=50, .attack=95, .defense=180, .speed=70, .special=85, .growth_rate=SLOW}, // Cloyster
+	[141] = {.hp=60, .attack=50, .defense=70, .speed=140, .special=80, .growth_rate=MEDIUM_FAST}, // Electrode
+	[142] = {.hp=95, .attack=70, .defense=73, .speed=60, .special=85, .growth_rate=FAST}, // Clefable
+	[143] = {.hp=65, .attack=90, .defense=120, .speed=60, .special=85, .growth_rate=MEDIUM_FAST}, // Weezing
+	[144] = {.hp=65, .attack=70, .defense=60, .speed=115, .special=65, .growth_rate=MEDIUM_FAST}, // Persian
+	[145] = {.hp=60, .attack=80, .defense=110, .speed=45, .special=50, .growth_rate=MEDIUM_FAST}, // Marowak
+	[147] = {.hp=45, .attack=50, .defense=45, .speed=95, .special=115, .growth_rate=MEDIUM_SLOW}, // Haunter
+	[148] = {.hp=25, .attack=20, .defense=15, .speed=90, .special=105, .growth_rate=MEDIUM_SLOW}, // Abra
+	[149] = {.hp=55, .attack=50, .defense=45, .speed=120, .special=135, .growth_rate=MEDIUM_SLOW}, // Alakazam
+	[150] = {.hp=63, .attack=60, .defense=55, .speed=71, .special=50, .growth_rate=MEDIUM_SLOW}, // Pidgeotto
+	[151] = {.hp=83, .attack=80, .defense=75, .speed=91, .special=70, .growth_rate=MEDIUM_SLOW}, // Pidgeot
+	[152] = {.hp=60, .attack=75, .defense=85, .speed=115, .special=100, .growth_rate=SLOW}, // Starmie
+	[153] = {.hp=45, .attack=49, .defense=49, .speed=45, .special=65, .growth_rate=MEDIUM_SLOW}, // Bulbasaur
+	[154] = {.hp=80, .attack=82, .defense=83, .speed=80, .special=100, .growth_rate=MEDIUM_SLOW}, // Venusaur
+	[155] = {.hp=80, .attack=70, .defense=65, .speed=100, .special=120, .growth_rate=SLOW}, // Tentacruel
+	[157] = {.hp=45, .attack=67, .defense=60, .speed=63, .special=50, .growth_rate=MEDIUM_FAST}, // Goldeen
+	[158] = {.hp=80, .attack=92, .defense=65, .speed=68, .special=80, .growth_rate=MEDIUM_FAST}, // Seaking
+	[163] = {.hp=50, .attack=85, .defense=55, .speed=90, .special=65, .growth_rate=MEDIUM_FAST}, // Ponyta
+	[164] = {.hp=65, .attack=100, .defense=70, .speed=105, .special=80, .growth_rate=MEDIUM_FAST}, // Rapidash
+	[165] = {.hp=30, .attack=56, .defense=35, .speed=72, .special=25, .growth_rate=MEDIUM_FAST}, // Rattata
+	[166] = {.hp=55, .attack=81, .defense=60, .speed=97, .special=50, .growth_rate=MEDIUM_FAST}, // Raticate
+	[167] = {.hp=61, .attack=72, .defense=57, .speed=65, .special=55, .growth_rate=MEDIUM_SLOW}, // Nidorino
+	[168] = {.hp=70, .attack=62, .defense=67, .speed=56, .special=55, .growth_rate=MEDIUM_SLOW}, // Nidorina
+	[169] = {.hp=40, .attack=80, .defense=100, .speed=20, .special=30, .growth_rate=MEDIUM_SLOW}, // Geodude
+	[170] = {.hp=65, .attack=60, .defense=70, .speed=40, .special=75, .growth_rate=MEDIUM_FAST}, // Porygon
+	[171] = {.hp=80, .attack=105, .defense=65, .speed=130, .special=60, .growth_rate=SLOW}, // Aerodactyl
+	[173] = {.hp=25, .attack=35, .defense=70, .speed=45, .special=95, .growth_rate=MEDIUM_FAST}, // Magnemite
+	[176] = {.hp=39, .attack=52, .defense=43, .speed=65, .special=50, .growth_rate=MEDIUM_SLOW}, // Charmander
+	[177] = {.hp=44, .attack=48, .defense=65, .speed=43, .special=50, .growth_rate=MEDIUM_SLOW}, // Squirtle
+	[178] = {.hp=58, .attack=64, .defense=58, .speed=80, .special=65, .growth_rate=MEDIUM_SLOW}, // Charmeleon
+	[179] = {.hp=59, .attack=63, .defense=80, .speed=58, .special=65, .growth_rate=MEDIUM_SLOW}, // Wartortle
+	[180] = {.hp=78, .attack=84, .defense=78, .speed=100, .special=85, .growth_rate=MEDIUM_SLOW}, // Charizard
+	[185] = {.hp=45, .attack=50, .defense=55, .speed=30, .special=75, .growth_rate=MEDIUM_SLOW}, // Oddish
+	[186] = {.hp=60, .attack=65, .defense=70, .speed=40, .special=85, .growth_rate=MEDIUM_SLOW}, // Gloom
+	[187] = {.hp=75, .attack=80, .defense=85, .speed=50, .special=100, .growth_rate=MEDIUM_SLOW}, // Vileplume
+	[188] = {.hp=50, .attack=75, .defense=35, .speed=40, .special=70, .growth_rate=MEDIUM_SLOW}, // Bellsprout
+	[189] = {.hp=65, .attack=90, .defense=50, .speed=55, .special=85, .growth_rate=MEDIUM_SLOW}, // Weepinbell
+	[190] = {.hp=80, .attack=105, .defense=65, .speed=70, .special=100, .growth_rate=MEDIUM_SLOW}, // Victreebel
+};
+
 
 Info get_item_info(int id)
 {

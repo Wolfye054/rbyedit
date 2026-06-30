@@ -1,4 +1,5 @@
 #include "rbyedit.h"
+#include "pokeinfo.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -18,6 +19,28 @@
 #define CURRENT_BOX_DATA_ADDR 0x30C0
 
 // TODO: finish character sets for the ascii conversion functions
+
+static int intsqrt(int n)
+{
+	if (n == 0 || n == 1) return n;
+    
+    long long start = 1, end = n / 2;
+    long long ans = 0;
+    
+    while (start <= end) {
+        long long mid = (start + end) / 2;
+        
+        if (mid * mid == n) return mid;
+        
+        if (mid * mid < n) {
+            start = mid + 1;
+            ans = mid; // Store potential floor
+        } else {
+            end = mid - 1;
+        }
+    }
+    return ans;
+}
 
 static uint8_t ascii_to_rby(uint8_t c)
 {
@@ -57,9 +80,69 @@ static uint32_t get_int24(uint8_t *save, int address)
 	return value;
 }
 
+static int xp_required_for_level(int level, GrowthRate rate)
+{
+	uint32_t n = level;
+	uint32_t n3 = n * n * n;
+	uint32_t n2 = n * n;
+
+	switch(rate)
+	{
+		case FAST:
+			return (4 * n3) / 5;
+
+		case MEDIUM_FAST:
+			return n3;
+
+		case MEDIUM_SLOW:
+			int32_t cube_term = (6 * (int32_t)n3) / 5;
+			int32_t square_term = 15 * (int32_t)n2;
+			int32_t linear_term = 100 * (int32_t)n;
+
+			int32_t total = cube_term - square_term + linear_term - 140;
+
+			return total;
+
+		case SLOW:
+			return (5 * n3) / 4;
+	}
+
+	return 0;
+}
+
+// There is a bug in the game where the medium slow formula can result in a negative number,
+// which overflows the 24 bit value into being very larg.
+// this function does not emulate that
+// TODO: should this function emulate the underflow bug?
+static uint8_t get_level(int xp, GrowthRate rate)
+{
+	for(int i = 1; i < 100; i++)
+	{
+		int xp_needed = xp_required_for_level(i, rate);
+		if(xp < xp_needed) return i - 1;
+	}
+
+	return 100;
+}
+
+static int calculate_stat(int base, int iv, int stat_xp, int level)
+{
+	return ((((base + iv) * 2 + (intsqrt(stat_xp) / 4)) * level) / 100) + 5;
+}
+
 static void set_derived_values(Pokemon *pokemon)
 {
-	return;
+	PokemonBaseStats base = get_pokemon_base_stats(pokemon->id);
+	int level = get_level(pokemon->xp, base.growth_rate);
+	pokemon->level = level;
+	
+	pokemon->hp = ((((base.hp + pokemon->hp_iv) * 2 + (intsqrt(pokemon->hp_xp) / 4)) * level) / 100)
+	+ level + 10;
+
+	pokemon->attack = calculate_stat(base.attack, pokemon->attack_iv, pokemon->attack_xp, level);
+	pokemon->defense = calculate_stat(base.defense, pokemon->defense_iv, pokemon->defense_xp, level);
+	pokemon->speed = calculate_stat(base.speed, pokemon->speed_iv, pokemon->speed_xp, level);
+	pokemon->special = calculate_stat(base.special, pokemon->special_iv, pokemon->special_xp, level);
 }
 
 static Pokemon get_pokemon(uint8_t *save, int address)
@@ -89,7 +172,6 @@ static Pokemon get_pokemon(uint8_t *save, int address)
 	// in that order.
 	uint16_t iv_values = get_int16(save, address + 0x1B);
 	
-	// TODO: check if these are the correct positions for iv values
 	uint8_t attack_iv = (iv_values >> 12) & 0x0F;
 	uint8_t defense_iv = (iv_values >> 8) & 0x0F;
 	uint8_t speed_iv = (iv_values >> 4) & 0x0F;
@@ -222,9 +304,9 @@ static PokemonBox get_pokemon_box(uint8_t *save, int address)
 	return box;
 }
 
+//TODO: function seems to segfault if player has never opened a box before
 static PokemonBox *get_pokemon_boxes(uint8_t *save)
 {
-	// TODO: currently getting trash data for derived values.
 	PokemonBox *boxes = malloc(12 * sizeof(PokemonBox));
 
 	// only the first 7 bits represent the box number, bit 8 checks whether the player

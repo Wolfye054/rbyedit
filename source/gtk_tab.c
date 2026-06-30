@@ -37,7 +37,7 @@ static void promt_new_item(GtkButton *button, List *item_list)
 	item_strings = gtk_string_list_new(NULL);
 	for(int i = 1; i <= 256; i++)
 	{
-		ItemInfo item = get_item_info(i);
+		Info item = get_item_info(i);
 		if(item.name)
 		{
 			gtk_string_list_append(item_strings, item.name);
@@ -97,7 +97,7 @@ static void create_pokemon_tab_entry(GtkWidget *tab_vbox, Pokemon *pokemon_group
 	GtkWidget *entry_hbox;
 	GtkWidget *pokemon_image, *name_label;
 
-	PokemonInfo pokemon_info = get_pokemon_info(pokemon->id);
+	Info pokemon_info = get_pokemon_info(pokemon->id);
 
 	entry_hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_widget_set_hexpand(entry_hbox, TRUE);
@@ -123,7 +123,7 @@ static void create_item_tab_entry(GtkWidget *tab_vbox, List *item_list, int inde
 	GtkWidget *item_image, *name_label;
 	GtkWidget *count_spin_button, *remove_button;
 
-	ItemInfo item = get_item_info(id);
+	Info item = get_item_info(id);
 
 	entry_hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_widget_set_hexpand(entry_hbox, TRUE);
