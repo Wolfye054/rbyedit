@@ -15,24 +15,30 @@ typedef struct
 	uint8_t move4_id;
 	uint16_t og_trainer_id;
 	uint32_t xp;
-	uint16_t hp_stat_xp;
-	uint16_t attack_stat_xp;
-	uint16_t defense_stat_xp;
-	uint16_t speed_stat_xp;
-	uint16_t special_stat_xp;
-	uint16_t iv;
+	uint16_t hp_xp;
+	uint16_t attack_xp;
+	uint16_t defense_xp;
+	uint16_t speed_xp;
+	uint16_t special_xp;
+	uint8_t hp_iv;
+	uint8_t attack_iv;
+	uint8_t defense_iv;
+	uint8_t speed_iv;
+	uint8_t special_iv;
 	uint8_t move1_pp;
 	uint8_t move2_pp;
 	uint8_t move3_pp;
 	uint8_t move4_pp;
+	char *nickname;
+	char *og_trainer_name;
+
+	// derived stats
 	uint8_t level;
-	uint16_t max_hp;
+	uint16_t hp;
 	uint16_t attack;
 	uint16_t defense;
 	uint16_t speed;
 	uint16_t special;
-	char *nickname;
-	char *og_trainer_name;
 } Pokemon;
 
 typedef struct
@@ -40,6 +46,12 @@ typedef struct
 	int count;
 	Pokemon *pokemon;
 } PokemonParty;
+
+typedef struct
+{
+	int count;
+	Pokemon *pokemon;
+} PokemonBox;
 
 typedef struct
 {
@@ -61,6 +73,7 @@ typedef struct
 	List bag;
 	List box_items;
 	PokemonParty party;
+	PokemonBox *pokemon_boxes;
 } SaveData;
 
 SaveData get_save_data(uint8_t *save);
