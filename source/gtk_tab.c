@@ -91,11 +91,69 @@ static void edit_item_count(GtkEditable *item_spin_button, List *item_list)
 	item_list->entries[index].count = count;
 }
 
+static void edit_pokemon_level(GtkButton *button, Pokemon *pokemon)
+{
+
+}
+
+static void display_pokemon_edit_window(GtkButton *button, Pokemon *pokemon)
+{
+	GtkWidget *edit_window, *main_window;
+	GtkWidget *hbox, *edits_vbox;
+	GtkWidget *pokemon_image;
+	GtkWidget *name_entry;// *species_dropdown;
+	GtkWidget *level_spin_button;
+	GtkWidget *label;
+	//GtkWidget *og_trainer_id_entry, *og_trainer_name_entry;
+	//GtkWidget *notebook;
+	//GtkWidget *apply_button, *close_button;
+
+	Info pokemon_info = get_pokemon_info(pokemon->id);
+	main_window = gtk_widget_get_ancestor(GTK_WIDGET(button), GTK_TYPE_WINDOW);
+	edit_window = gtk_window_new();
+	gtk_window_set_title(GTK_WINDOW(edit_window), "Edit Pokemon");
+	gtk_window_set_modal(GTK_WINDOW(edit_window), TRUE);
+	gtk_window_set_transient_for(GTK_WINDOW(edit_window), GTK_WINDOW(main_window));
+
+	edits_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+
+	gchar *full_path = g_build_filename("..", "assets", "pokemon", pokemon_info.filename, NULL);
+	GFile *file = g_file_new_for_path(full_path);
+	pokemon_image = gtk_picture_new_for_file(file);
+	gtk_picture_set_content_fit(GTK_PICTURE(pokemon_image), GTK_CONTENT_FIT_CONTAIN);
+	gtk_widget_set_size_request(pokemon_image, 68, 56);
+	gtk_box_append(GTK_BOX(edits_vbox), pokemon_image);
+	g_free(full_path);
+
+	name_entry = gtk_entry_new();
+	gtk_editable_set_text(GTK_EDITABLE(name_entry), pokemon->nickname);
+	label = gtk_label_new("Name");
+	gtk_box_append(GTK_BOX(edits_vbox), label);
+	gtk_box_append(GTK_BOX(edits_vbox), name_entry);
+
+	//TODO: species_dropdown
+
+	level_spin_button = gtk_spin_button_new_with_range(1, 100, 1);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(level_spin_button), pokemon->level);
+	g_signal_connect(level_spin_button, "value-changed",
+			G_CALLBACK(edit_pokemon_level), pokemon);
+	label = gtk_label_new("Level");
+	gtk_box_append(GTK_BOX(edits_vbox), label);
+	gtk_box_append(GTK_BOX(edits_vbox), level_spin_button);
+
+	hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+	gtk_window_set_child(GTK_WINDOW(edit_window), hbox);
+	gtk_box_append(GTK_BOX(hbox), edits_vbox);
+
+	gtk_window_present(GTK_WINDOW(edit_window));
+}
+
 static void create_pokemon_tab_entry(GtkWidget *tab_vbox, Pokemon *pokemon_group,
 	int index, Pokemon *pokemon)
 {
 	GtkWidget *entry_hbox;
 	GtkWidget *pokemon_image, *name_label;
+	GtkWidget *edit_button;
 
 	Info pokemon_info = get_pokemon_info(pokemon->id);
 
@@ -105,13 +163,18 @@ static void create_pokemon_tab_entry(GtkWidget *tab_vbox, Pokemon *pokemon_group
 	gchar *full_path = g_build_filename("..", "assets", "pokemon", pokemon_info.filename, NULL);
 	GFile *file = g_file_new_for_path(full_path);
 	pokemon_image = gtk_picture_new_for_file(file);
-	gtk_picture_set_content_fit	(GTK_PICTURE(pokemon_image), GTK_CONTENT_FIT_CONTAIN);
+	gtk_picture_set_content_fit(GTK_PICTURE(pokemon_image), GTK_CONTENT_FIT_CONTAIN);
 	gtk_widget_set_size_request(pokemon_image, 68, 56);
 	gtk_box_append(GTK_BOX(entry_hbox), pokemon_image);
 	g_free(full_path);
 
 	name_label = gtk_label_new(pokemon_info.name);
 	gtk_box_append(GTK_BOX(entry_hbox), name_label);
+
+	edit_button = gtk_button_new_from_icon_name("document-edit-symbolic");
+	g_signal_connect(G_OBJECT(edit_button), "clicked", G_CALLBACK(display_pokemon_edit_window),
+			pokemon);
+	gtk_box_append(GTK_BOX(entry_hbox), edit_button);
 
 	gtk_box_append(GTK_BOX(tab_vbox), entry_hbox);
 }
@@ -178,8 +241,8 @@ void update_party_tab(GtkWidget *tab_scrolled, PokemonParty *party)
 
 	for(int i = 0; i < party->count; i++)
 	{
-		Pokemon pokemon = party->pokemon[i];
-		create_pokemon_tab_entry(tab_vbox, party->pokemon, i, &pokemon);
+		Pokemon *pokemon = party->pokemon + i;
+		create_pokemon_tab_entry(tab_vbox, party->pokemon, i, pokemon);
 	}
 }
 
@@ -199,8 +262,8 @@ void update_pokemon_box_tab(GtkWidget *tab_scrolled, PokemonBox *boxes)
 
 			for(int j = 0; j < boxes[i].count; j++)
 			{
-				Pokemon pokemon = boxes[i].pokemon[j];
-				create_pokemon_tab_entry(tab_vbox, boxes[i].pokemon, i, &pokemon);
+				Pokemon *pokemon = boxes[i].pokemon + j;
+				create_pokemon_tab_entry(tab_vbox, boxes[i].pokemon, i, pokemon);
 			}
 		}
 	}
