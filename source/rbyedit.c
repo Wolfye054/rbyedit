@@ -294,11 +294,25 @@ static PokemonBox get_pokemon_box(uint8_t *save, int address)
 	box.count = save[address];
 	box.pokemon = malloc(20 * sizeof(Pokemon));
 
-	address += 0x16;
+	int addr = address + 0x16;
 	for(int i = 0; i < box.count; i++)
 	{
-		box.pokemon[i] = get_pokemon(save, address);
-		address += 0x21;
+		box.pokemon[i] = get_pokemon(save, addr);
+		addr += 0x21;
+	}
+
+	addr = address + 0x2AA;
+	for(int i = 0; i < box.count; i++)
+	{
+		box.pokemon[i].og_trainer_name = get_string(save, addr);
+		addr += 0xB;
+	}
+
+	addr = address + 0x386;
+	for(int i = 0; i < box.count; i++)
+	{
+		box.pokemon[i].nickname = get_string(save, addr);
+		addr += 0xB;
 	}
 
 	return box;
