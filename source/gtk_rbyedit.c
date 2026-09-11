@@ -582,8 +582,8 @@ static void save_file()
 			GTK_EDITABLE(global_widgets.player_name_entry));
 	save.save_data.rival_name = gtk_editable_get_text(
 			GTK_EDITABLE(global_widgets.rival_name_entry));
-	save.save_data.money = atoi(gtk_editable_get_text(
-				GTK_EDITABLE(global_widgets.money_entry)));
+	save.save_data.money = gtk_spin_button_get_value_as_int(
+			GTK_SPIN_BUTTON(global_widgets.money_entry));
 
 	update_save(save.save_mem, save.save_data);
 	g_file_replace_contents(save.file, (char *)save.save_mem, save.length, NULL,
@@ -605,7 +605,6 @@ static void load_file(GObject *file_dialog, GAsyncResult *result, gpointer windo
 	}
 
 	GError *error = NULL;
-	char str[12];
 
 	save.file = gtk_file_dialog_open_finish(GTK_FILE_DIALOG(file_dialog), result, &error);
 
@@ -635,8 +634,8 @@ static void load_file(GObject *file_dialog, GAsyncResult *result, gpointer windo
 			GTK_EDITABLE(global_widgets.rival_name_entry),
 			save.save_data.rival_name);
 
-	snprintf(str, sizeof(str), "%d", save.save_data.money);
-	gtk_editable_set_text(GTK_EDITABLE(global_widgets.money_entry), str);
+	gtk_spin_button_set_value(
+			GTK_SPIN_BUTTON(global_widgets.money_entry), save.save_data.money);
 
 	update_item_tab(global_widgets.bag_tab_scrolled, &save.save_data.bag);
 	update_item_tab(global_widgets.item_box_tab_scrolled, &save.save_data.box_items);
